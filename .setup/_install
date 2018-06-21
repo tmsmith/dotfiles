@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+# absolute path to .files directory
+local root=${0:a:h:h}
+
+source core.zsh
+source $root/zsh/lib/os.zsh
+
+set -e
+banner::print
+
+local DF=$root
+df::install

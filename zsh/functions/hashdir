@@ -1,0 +1,6 @@
+# hashdir adds the given parameters to the direction hash table
+# and creates an alias of the same name that skips command correction
+##
+# hashdir $1:alias $2:path
+#
+function hashdir() { hash -d $1=$2 && alias $1="nocorrect $1"; }
