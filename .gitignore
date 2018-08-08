@@ -1,2 +1,6 @@
 .DS_Store
-private
+private/*
+!private/.keep
+
+home/iterm2/*
+!home/iterm2/com.googlecode.iterm2.plist

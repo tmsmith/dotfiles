@@ -76,6 +76,10 @@ df::install() {
   print -l "\n>>>>>> Linking private files <<<<<<\n"
   for file ($DF/private/*(.N)) df::link $file
 
+  # link all directories to private directory
+    print -l "\n>>>>>> Linking private directories <<<<<<\n"
+  for dir ($DF/private/*(/N)) df::link $dir
+
   # sync fonts to ~/Library/Fonts
   print -l "\n>>>>>> Syncing Fonts <<<<<<\n"
   rsync --exclude ".DS_Store" --exclude ".git" --exclude "README.md" -av --no-perms $DF/home/fonts/ ~/Library/Fonts/

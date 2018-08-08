@@ -1,0 +1,25 @@
+#!/bin/zsh
+
+local root=${0:a:h:h}
+
+source core.zsh
+
+echo $root
+
+set -e
+
+local DF=$root
+
+# keep-alive: update existing sudo time stamp until this script has finished
+# while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+# TRAPINT() {
+#   print "Caught SIGINT, aborting."
+#   return $(( 128 + $1 ))
+# }
+
+# link all files to private directory
+for file ($DF/private/*(.N)) df::link $file
+
+# link all files to private directory
+for dir ($DF/private/*(/N)) df::link $dir

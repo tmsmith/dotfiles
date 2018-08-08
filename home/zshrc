@@ -69,4 +69,6 @@ if [[ "$OSX" = "1" ]] then
   . `brew --prefix`/etc/profile.d/z.sh
 fi
 
-# test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+eval "$(direnv hook zsh)"
+
+test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration.zsh"

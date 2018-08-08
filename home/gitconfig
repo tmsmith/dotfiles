@@ -32,7 +32,8 @@
 
 [core]
   excludesfile = /opt/boxen/config/git/gitignore
-  editor = atom --wait
+  # editor = atom --wait
+  editor = nano
 	pager = diff-so-fancy | less --tabs=4 -RFX
 
 [apply]
@@ -141,3 +142,6 @@
 
 [diff-so-fancy]
 	stripLeadingSymbols = false
+
+[url "git@code.ac.st:"]
+  insteadOf = https://code.ac.st/
