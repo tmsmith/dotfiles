@@ -49,7 +49,7 @@ brew 'protobuf', args: ['HEAD']
 brew 'python'
 brew 'terminal-notifier'
 brew 'wget'
-brew 'z'
+# brew 'z'
 brew 'zsh-syntax-highlighting'
 
 cask '1password'

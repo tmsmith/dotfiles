@@ -35,6 +35,7 @@ plugins=(
   vagrant
   web-search
   private-loader
+  zsh-autosuggestions
 )
 
 # add homebrew functions and completions to fpath
@@ -72,3 +73,6 @@ fi
 eval "$(direnv hook zsh)"
 
 test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration.zsh"
+
+ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
