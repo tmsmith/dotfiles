@@ -1,11 +1,12 @@
 
 [hub]
   protocol = https
-  host = code.ac.st
+  host = github.com
 
 [user]
   name = thad
   email = thad@acst.com
+	signingkey = 2529B1420B69D8AB
   #signingkey = 6FB5819C
 
 [color]
@@ -126,7 +127,7 @@
   gr   = grep -Ii
 
 [github]
-  user = thad
+  user = tmsmith
 
 [filter "lfs"]
   clean = git-lfs clean %f
@@ -145,3 +146,5 @@
 
 [url "git@code.ac.st:"]
   insteadOf = https://code.ac.st/
+[url "git@github.com:acst/"]
+	insteadOf = https://github.com/acst/

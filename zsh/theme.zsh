@@ -40,21 +40,40 @@ prompt_my_go_version() {
 }
 
 # if the current aws profile is not the default, change the color
+# prompt_my_aws() {
+#   local aws_profile="$AWS_DEFAULT_PROFILE"
+#   if [ -n "$aws_profile" ]; then
+#     local color
+#     local default
+#     color=('black' '249')
+
+#     if [[ -a ~/.aws/default ]]; then
+#       default=$(cat ~/.aws/default)
+#     fi
+
+#     if [[ -n "$default" && ("$aws_profile" != "$default") ]]; then
+#       color=(red white)
+#     fi
+
+#     "$1_prompt_segment" "prompt_aws" "$2" $color[1] $color[2] "$aws_profile" 'AWS_ICON'
+#   fi
+# }
+
+source  ~/.aws/accts
+
 prompt_my_aws() {
   local aws_profile="$AWS_DEFAULT_PROFILE"
   if [ -n "$aws_profile" ]; then
     local color
-    local default
     color=('black' '249')
 
-    if [[ -a ~/.aws/default ]]; then
-      default=$(cat ~/.aws/default)
-    fi
-
-    if [[ -n "$default" && ("$aws_profile" != "$default") ]]; then
-      color=(red white)
-    fi
-
+    for acct in "${aws_accts[@]}" ; do
+      acct_name="${acct%%:*}"
+      if [[ "$aws_profile" == "$acct_name" ]] then
+        declare -a colors=( $(echo ${acct##*:} | cut -d' ' -f1- ) )
+        color=(${colors[1]} ${colors[2]})
+      fi
+    done    
     "$1_prompt_segment" "prompt_aws" "$2" $color[1] $color[2] "$aws_profile" 'AWS_ICON'
   fi
 }

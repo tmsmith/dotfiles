@@ -110,14 +110,15 @@ layouts = {
 		name = "Coding",
 		description = "Write some code",
 		small = {
-			{ "Atom", positions.lefthalf },
+			{ "Code", positions.lefthalf },
 			{ "iTerm2", positions.toprighthalf },
 
 		},
 		large = {
-			{ "Atom", positions.lefthalf },
-			{ "iTerm2", positions.toprightthird },
-			{ "Google Chrome", positions.bottomrighthalf }
+			{ "Code", positions.toplefthalf },
+			{ "iTerm2", positions.toprighthalf },
+			{ "Google Chrome", positions.bottomrighthalf },
+			{ "DataGrip", positions.bottomlefthalf }
 		}
 	}
 }
