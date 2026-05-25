@@ -1,116 +1,58 @@
-cask_args appdir: '/Applications'
-
-tap 'homebrew/core'
-tap 'homebrew/boneyard'
-tap 'homebrew/bundle'
-
-tap 'caskroom/versions'
-tap 'caskroom/cask'
-
-tap 'go-delve/delve'
-
-tap 'aspnet/dnx'
-
-cask 'java'
-
-brew 'ack'
-brew 'autoconf'
-brew 'awscli', args: ['HEAD']
-brew 'boost'
-brew 'coreutils'
-brew 'cunit'
-brew 'curl', args: ['with-nghttp2']
-brew 'dep'
-brew 'diff-so-fancy'
-brew 'direnv'
-brew 'findutils'
-brew 'fswatch'
-brew 'fzf'
-brew 'gettext'
-brew 'gnu-tar'
-brew 'gnu-sed'
-brew 'git'
-brew 'go'
-brew 'go-delve/delve/delve'
-brew 'htop-osx'
-brew 'hub'
-brew 'libev'
-brew 'libevent'
-brew 'libssh2'
-brew 'libtool'
-brew 'lua'
-brew 'make'
-brew 'makedepend'
-brew 'mas'
-brew 'nghttp2'
-brew 'nginx'
-brew 'node'
-brew 'protobuf', args: ['HEAD']
-brew 'python'
-brew 'terminal-notifier'
-brew 'wget'
-# brew 'z'
-# brew 'zsh-syntax-highlighting'
-
-cask '1password'
-cask 'amazon-music'
-cask 'atom'
-cask 'cyberduck'
-cask 'disk-inventory-x'
-cask 'docker'
-cask 'dropbox'
-cask 'firefox'
-cask 'caskroom/versions/firefox-developer-edition'
-cask 'gitx'
-cask 'gpg-suite'
-cask 'google-chrome'
-cask 'google-drive-file-stream'
-cask 'hammerspoon'
-cask 'hipchat'
-cask 'insomnia'
-cask 'iterm2'
-cask 'jetbrains-toolbox'
-cask 'kdiff3'
-cask 'keycastr'
-cask 'ngrok'
-cask 'postman'
-cask 'royal-tsx'
-cask 'slack'
-cask 'sublime-text'
-cask 'transmit'
-cask 'tunnelblick'
-cask 'toggl'
-cask 'visual-studio-code'
-cask 'vmware-fusion'
-
-# brew 'aspnet/dnx/dnvm'
-# brew 'aspnet/dnx/kvm'
-# brew 'homebrew/versions/gmp4'
-# brew 'homebrew/versions/isl011'
-# brew 'homebrew/versions/cloog018'
-# brew 'homebrew/versions/mpfr2'
-# brew 'homebrew/versions/libmpc08'
-# brew 'homebrew/versions/gcc48'
-#
-# cask 'caffeine'
-# cask 'cyberduck'
-# cask 'datagrip'
-
-# cask 'dotnet'
-#
-# cask 'geektool'
-# cask 'ginbox'
-# cask 'github-desktop'
-# cask 'google-chrome'
-# cask 'kap'
-# cask 'licecap'
-# cask 'mojibar'
-#
-# cask 'rdm'
-#
-# cask 'sequel-pro'
-# cask 'shuttle'
-#
-# cask 'transmit'
-# cask 'vmware-fusion'
-# cask 'wmail'
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "warrensbox/tap"
+brew "ack"
+brew "python@3.9"
+brew "awscli", args: ["HEAD"]
+brew "libssh2"
+brew "curl"
+# brew "diff-so-fancy"
+# brew "eksctl"
+brew "findutils"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "gnu-sed"
+brew "gnu-tar"
+brew "go"
+# brew "helm"
+brew "jq"
+# brew "kind"
+# brew "kubernetes-cli"
+brew "make"
+brew "mas"
+brew "node"
+# brew "protobuf", args: ["HEAD"]
+brew "rsync"
+brew "starship"
+brew "tldr"
+brew "watch"
+brew "zoxide"
+# brew "warrensbox/tap/tfswitch"
+# brew "terragrunt"
+cask "1password", args: { appdir: "/Applications" }
+# cask "another-redis-desktop-manager"
+# cask "cyberduck", args: { appdir: "/Applications" }
+cask "discord"
+cask "docker", args: { appdir: "/Applications" }
+cask "dotnet-sdk"
+# cask "firefox-developer-edition", args: { appdir: "/Applications" }
+# cask "google-drive"
+# cask "gpg-suite", args: { appdir: "/Applications" }
+cask "hammerspoon", args: { appdir: "/Applications" }
+cask "insomnia"
+cask "iterm2", args: { appdir: "/Applications" }
+# cask "java", args: { appdir: "/Applications" }
+# cask "jetbrains-toolbox", args: { appdir: "/Applications" }
+# cask "keybase"
+cask "royal-tsx", args: { appdir: "/Applications" }
+# cask "slack", args: { appdir: "/Applications" }
+cask "spotify"
+cask "sublime-text", args: { appdir: "/Applications" }
+# cask "tenor"
+# cask "tunnelblick", args: { appdir: "/Applications" }
+cask "visual-studio-code", args: { appdir: "/Applications" }
+# cask "vmware-fusion", args: { appdir: "/Applications" }
+# mas "Tailscale", id: 1475387142

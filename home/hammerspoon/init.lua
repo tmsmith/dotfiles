@@ -1,5 +1,6 @@
 require "screen"
 --require "stuff"
+local clippy = require "clippy"
 
 hs.window.animationDuration = 0
 
@@ -24,6 +25,7 @@ hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", automaticReloadConfig)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", reloadConfig)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "L", function() hs.caffeinate.startScreensaver() end)
 
+clippy:init()
 
 
 -- TODO: layouts

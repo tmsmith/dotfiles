@@ -4,3 +4,5 @@ private/*
 
 home/iterm2/*
 !home/iterm2/com.googlecode.iterm2.plist
+
+home/vscode/

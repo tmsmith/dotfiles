@@ -29,3 +29,7 @@ function password_gen() {
 
   head /dev/urandom | LC_ALL=C tr -dc $chars | head -c $length ; echo '';
 }
+
+alias pwg=password_gen
+
+

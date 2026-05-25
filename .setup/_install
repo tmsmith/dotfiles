@@ -4,7 +4,7 @@
 local root=${0:a:h:h}
 
 source core.zsh
-source $root/zsh/lib/os.zsh
+source $root/zsh/os.zsh
 
 set -e
 banner::print

@@ -4,10 +4,8 @@
   host = github.com
 
 [user]
-  name = thad
-  email = thad@acst.com
-	signingkey = 2529B1420B69D8AB
-  #signingkey = 6FB5819C
+  name = 
+  email =
 
 [color]
   diff   = auto
@@ -57,6 +55,13 @@
   default = simple
 
 [alias]
+  # Removes all branches except master
+  nuke = "!f() { git branch | grep -v 'master' | grep -v '^*' | xargs git branch -D; }; f"
+  
+  # Fetch from remote and remove all branch who's orgin has been removed
+  # This only works if tracking upstream
+  sync = "!f() { git checkout master; git fetch -p; git reset --hard origin/master; git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -D; }; f"
+
   la = "!git config -l | grep alias | cut -c 7-"
 
   promote = !$DF/bin/git-promote
@@ -146,5 +151,11 @@
 
 [url "git@code.ac.st:"]
   insteadOf = https://code.ac.st/
+
 [url "git@github.com:acst/"]
 	insteadOf = https://github.com/acst/
+
+[ini]
+	defaultBranch = main
+[init]
+	defaultBranch = main
