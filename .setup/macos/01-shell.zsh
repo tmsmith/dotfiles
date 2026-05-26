@@ -1,3 +1,5 @@
+echo "01 BEGIN"
+
 # setup dotfiles
 log::step "Installing dotfiles"
 
@@ -11,3 +13,5 @@ if [[ ! "$shell" = "zsh" ]]; then
 else
   log::g "shell already set to zsh for user $USER"
 fi
+
+echo "01 END"

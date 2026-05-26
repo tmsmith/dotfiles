@@ -1,80 +1,17 @@
-# .files root directory
-#
-# expand %x since $0 is unreliable.
-#
-# TODO(js): Is there a 'cleaner' way to get this?
-DF=${${(%):-%x}:A:h:h}
+autoload -Uz compinit
+compinit
 
-# oh-my-zsh locations
-ZSH=$DF/zsh/oh-my-zsh
-ZSH_CUSTOM=$DF/zsh/custom
-
-# oh-my-zsh settings (config, theme, etc)
-for f ($DF/zsh/*.zsh) source $f
-
-# oh-my-zsh plugins
-plugins=(
-  aws
-  dash
-  docker
-  dotnet
-  encode64
-  extract
-  fzf
-  gem
-  git
-  git2
-  go
-  # grc
-  history
-  history-substring-search
-  homebrew
-  iterm2
-  jira
-  ruby
-  vagrant
-  web-search
-  private-loader
-  zsh-autosuggestions
-  z
-  zsh-syntax-highlighting
-)
-
-# add homebrew functions and completions to fpath
-if [ -d $HOMEBREW_ROOT/share/zsh/site-functions ]; then
-  fpath=($HOMEBREW_ROOT/share/zsh/site-functions $fpath)
+if [ "$(command -v starship)" ]; then
+	eval "$(starship init zsh)"
 fi
 
-# add local functions and completions to fpath
-fpath=($DF/zsh/functions $fpath)
-autoload -U $DF/zsh/functions/*(:t)
-
-# load oh-my-zsh
-source $ZSH/oh-my-zsh.sh
-
-# oh-my-zsh initializes completion before plugins are loaded.
-# so reload here to pickup anything added to $fpath by plugins.
-autoload -U compinit && compinit
-
-# use .localrc for secrets, etc that you don't want in git
 [ -L ~/.localrc ] && source ~/.localrc
 
-#load .NET files
-# source dnvm.sh
-# source kvm.sh
+for file ($DF/zsh/*.zsh); do
+  source $file
+done
 
-#
-# mac specific
-#
-if [[ "$OSX" = "1" ]] then
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+autoload -U compinit && compinit
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-  # . `brew --prefix`/etc/profile.d/z.sh
-fi
-
-eval "$(direnv hook zsh)"
-
-test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration.zsh"
-
-# ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+[ -f ~/.docker/init-zsh.sh ] && source ~/.docker/init-zsh.sh

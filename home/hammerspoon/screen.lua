@@ -117,8 +117,9 @@ layouts = {
 		large = {
 			{ "Code", positions.toplefthalf },
 			{ "iTerm2", positions.toprighthalf },
-			{ "Google Chrome", positions.bottomrighthalf },
-			{ "DataGrip", positions.bottomlefthalf }
+			{ "Firefox Developer Edition", positions.bottomrighthalf },
+			{ "Brave Browser", positions.bottomrighthalf },
+			{ "DataGrip", positions.bottomlefthalf },
 		}
 	}
 }
