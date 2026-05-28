@@ -1,20 +1,16 @@
-# deprecated tap "homebrew/bundle"
+# deprecated tap "homebrew/bundl"
 # deprecated tap "homebrew/cask"
 # error tap "homebrew/cask-versions"
 # not needed tap "homebrew/core"
-tap "warrensbox/tap"
+
 tap "microsoft/mssql-release"
+tap "warrensbox/tap"
+
 brew "ack"
-brew "python@3.9"
-brew "awscli", args: ["HEAD"]
 brew "azcopy"
 brew "azure-cli"
-brew "htop"
-brew "pipx"
-brew "libssh2"
 brew "curl"
-# brew "diff-so-fancy"
-# brew "eksctl"
+brew "diff-so-fancy"
 brew "findutils"
 brew "fzf"
 brew "gh"
@@ -22,48 +18,63 @@ brew "git"
 brew "gnu-sed"
 brew "gnu-tar"
 brew "go"
-# brew "helm"
+brew "htop"
 brew "jq"
-# brew "kind"
-# brew "kubernetes-cli"
+brew "libssh2"
 brew "make"
 brew "mas"
+brew "microsoft/mssql-release/mssql-tools"
 brew "node"
-# brew "protobuf", args: ["HEAD"]
+brew "pipx"
+brew "python@3.9"
 brew "rsync"
 brew "starship"
 brew "tldr"
 brew "watch"
 brew "zoxide"
-brew "microsoft/mssql-release/mssql-tools"
-# brew "warrensbox/tap/tfswitch"
-# brew "terragrunt"
+
 cask "1password", args: { appdir: "/Applications" }
 cask "another-redis-desktop-manager"
+cask "claude"
 cask "cyberduck", args: { appdir: "/Applications" }
 cask "discord"
-cask "docker", args: { appdir: "/Applications" }
-cask "dotnet-sdk"
+cask "docker-desktop", args: { appdir: "/Applications" }
+cask "google-chrome"
+cask "hammerspoon", args: { appdir: "/Applications" }
+cask "iterm2", args: { appdir: "/Applications" }
+cask "microsoft-azure-storage-explorer"
+cask "microsoft-office"
+cask "microsoft-teams"
+cask "postman"
+cask "rectangle"
+cask "royal-tsx", args: { appdir: "/Applications" }
+cask "spotify"
+cask "sublime-text", args: { appdir: "/Applications" }
+cask "trilium-notes"
+cask "visual-studio-code", args: { appdir: "/Applications" }
+cask "zoom"
+
+mas "Tailscale", id: 1475387142
+
+vscode "anthropic.claude-code"
+
+# cask "vmware-fusion", args: { appdir: "/Applications" }
+
+# cask "slack", args: { appdir: "/Applications" }
 # cask "firefox-developer-edition", args: { appdir: "/Applications" }
 # cask "google-drive"
 # cask "gpg-suite", args: { appdir: "/Applications" }
-cask "hammerspoon", args: { appdir: "/Applications" }
-cask "postman"
-cask "iterm2", args: { appdir: "/Applications" }
 # cask "java", args: { appdir: "/Applications" }
 # cask "jetbrains-toolbox", args: { appdir: "/Applications" }
 # cask "keybase"
-cask "royal-tsx", args: { appdir: "/Applications" }
-# cask "slack", args: { appdir: "/Applications" }
-cask "spotify"
-cask "sublime-text", args: { appdir: "/Applications" }
 # cask "tenor"
 # cask "tunnelblick", args: { appdir: "/Applications" }
-cask "visual-studio-code", args: { appdir: "/Applications" }
-# cask "vmware-fusion", args: { appdir: "/Applications" }
-cask "microsoft-azure-storage-explorer"
-cask "google-chrome"
-cask "zoom"
-cask "trilium-notes"
+# brew "awscli", args: ["HEAD"]
+# brew "protobuf", args: ["HEAD"]
+# brew "eksctl"
+# brew "helm"
+# brew "kind"
+# brew "kubernetes-cli"
 
-mas "Tailscale", id: 1475387142
+# brew "warrensbox/tap/tfswitch"
+# brew "terragrunt"

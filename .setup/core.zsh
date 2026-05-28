@@ -1,8 +1,6 @@
 setopt extended_glob
 autoload -U colors && colors
 
-# source $root/zsh/oh-my-zsh/lib/spectrum.zsh
-
 # banner
 banner::print() {
   printf '%s\n' '    __ _ _           '
