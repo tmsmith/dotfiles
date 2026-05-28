@@ -73,12 +73,14 @@ grid = {
 
 bindKey(cmd_ctrl_alt, "Left", function()
 	local win = hs.window.focusedWindow()
+	if not win then hs.alert.show("No focused window") return end
 	local nextScreen = win:screen():previous()
 	win:moveToScreen(nextScreen)
 end)
 
 bindKey(cmd_ctrl_alt, "Right", function()
 	local win = hs.window.focusedWindow()
+	if not win then hs.alert.show("No focused window") return end
 	local nextScreen = win:screen():next()
 	win:moveToScreen(nextScreen)
 end)
@@ -87,6 +89,7 @@ hs.fnutils.each(grid, function(entry)
 	bindKey(cmd_ctrl, entry.key, function()
 		local units = entry.units
 		local win = hs.window.focusedWindow()
+		if not win then hs.alert.show("No focused window") return end
 		local winGeo = win:frame()
 		-- local screen = hs.screen.mainScreen()
 		local screen = win:screen()
@@ -115,13 +118,25 @@ layouts = {
 
 		},
 		large = {
-			{ "Code", positions.toplefthalf },
-			{ "iTerm2", positions.toprighthalf },
-			{ "Firefox Developer Edition", positions.bottomrighthalf },
-			{ "Brave Browser", positions.bottomrighthalf },
-			{ "DataGrip", positions.bottomlefthalf },
+			{ "Code", positions.left2thirds },
+			{ "iTerm2", positions.toprightthird }
+			-- { "Google Chrome", positions.bottomrighthalf }
 		}
-	}
+	},
+	{
+		name = "Teams",
+		description = "",
+		small = {
+			{ "Outlook", positions.lefthalf },
+			{ "Microsoft Teams", positions.righthalf },
+
+		},
+		small = {
+			{ "Outlook", positions.lefthalf },
+			{ "Microsoft Teams", positions.righthalf },
+
+		}
+	}	
 }
 
 currentLayout = nil
@@ -162,14 +177,14 @@ layoutChooser:choices(hs.fnutils.imap(layouts, function(layout)
     	index=i,
     	text=layout.name,
     	subText=layout.description
-  	}
+  	} 
 end))
 
 layoutChooser:rows(#layouts)
 layoutChooser:width(20)
 layoutChooser:subTextColor({red=0, green=0, blue=0, alpha=0.4})
 
-bindKey(cmd_ctrl, ';', function()
+bindKey(cmd_ctrl_alt, ';', function()
 	layoutChooser:show()
 end)
 
@@ -180,3 +195,35 @@ hs.screen.watcher.new(function()
 
 	applyLayout(currentLayout)
 end):start()
+
+bindKey(cmd_ctrl_alt, 'd', function()
+	local app = hs.application.frontmostApplication()
+	print("---- window debug ----")
+	print("frontmostApp:", app:name(), "bundleID:", app:bundleID())
+	print("hs.window.focusedWindow():", hs.window.focusedWindow())
+	print("hs.window.frontmostWindow():", hs.window.frontmostWindow())
+	print("app:focusedWindow():", app:focusedWindow())
+	print("app:mainWindow():", app:mainWindow())
+	local wins = app:allWindows()
+	print("app:allWindows() count:", #wins)
+	for i, w in ipairs(wins) do
+		print(string.format("  [%d] title=%q role=%s subrole=%s standard=%s visible=%s",
+			i, w:title() or "", tostring(w:role()), tostring(w:subrole()),
+			tostring(w:isStandard()), tostring(w:isVisible())))
+	end
+	-- Raw AX-tree inspection
+	local ax = hs.axuielement.applicationElement(app)
+	print("axuielement:", ax)
+	if ax then
+		local children = ax:attributeValue("AXChildren") or {}
+		print("AXChildren count:", #children)
+		for i, c in ipairs(children) do
+			print(string.format("  child[%d] role=%s subrole=%s title=%q",
+				i, tostring(c:attributeValue("AXRole")),
+				tostring(c:attributeValue("AXSubrole")),
+				tostring(c:attributeValue("AXTitle") or "")))
+		end
+		local axWins = ax:attributeValue("AXWindows") or {}
+		print("AXWindows count:", #axWins)
+	end
+end)

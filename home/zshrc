@@ -11,7 +11,6 @@ for file ($DF/zsh/*.zsh); do
   source $file
 done
 
-autoload -U compinit && compinit
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 [ -f ~/.docker/init-zsh.sh ] && source ~/.docker/init-zsh.sh
