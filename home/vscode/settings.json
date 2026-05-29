@@ -1,0 +1,15 @@
+{
+    "diffEditor.ignoreTrimWhitespace": false,
+    "workbench.activityBar.location": "top",
+    "remote.autoForwardPortsSource": "hybrid",
+    "chat.commandCenter.enabled": false,
+    "chat.viewSessions.orientation": "stacked",
+    "editor.inlineSuggest.suppressSuggestions": true,
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "claudeCode.preferredLocation": "panel"
+}

@@ -2,7 +2,18 @@
 private/*
 !private/.keep
 
+tmp/
+
 home/iterm2/*
 !home/iterm2/com.googlecode.iterm2.plist
 
-home/vscode/
+home/vscode/*
+!home/vscode/settings.json
+
+# Claude desktop — only track config; exclude runtime state and secrets
+home/claude/*
+!home/claude/settings.json
+!home/claude/commands/
+!home/claude/plugins/
+home/claude/plugins/*
+!home/claude/plugins/blocklist.json
