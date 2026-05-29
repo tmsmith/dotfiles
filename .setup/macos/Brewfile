@@ -56,7 +56,7 @@ cask "zoom"
 
 mas "Tailscale", id: 1475387142
 
-vscode "anthropic.claude-code"
+# VSCode extensions are managed by .setup/macos/06-vscode.zsh
 
 # cask "vmware-fusion", args: { appdir: "/Applications" }
 
