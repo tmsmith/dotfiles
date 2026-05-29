@@ -1,0 +1,28 @@
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+
+HISTSIZE=1000000000
+SAVEHIST=1000000000
+
+export STARSHIP_CONFIG=~/.starship
+export GOPATH=$HOME/src/go
+export PATH=$PATH:$HOME/bin:$GOPATH/bin
+
+## History command configuration
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt inc_append_history     # add commands to HISTFILE in order of execution
+setopt share_history          # share command history data
+setopt hist_ignore_all_dups   # Delete old recorded entry if new entry is a duplicate
+setopt hist_save_no_dups      # Don't write duplicate entries in the history file.
+setopt hist_find_no_dups
+
+
+## Path
+[[ -d "$HOME/bin" ]] && export PATH="$HOME/bin:$PATH"
+export PATH=/usr/local/bin:/opt/homebrew/bin:$PATH
+
+
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Install one or more .NET SDK channels via the official dotnet-install.sh.
+# With no args, installs the latest.
+#
+# Usage:
+#   install-dotnet              # install latest
+#   install-dotnet 8.0 9.0      # install specific channels
+#   install-dotnet LTS STS      # install named channels
+#
+# The installer is cached at ~/.cache/dotnet-install.sh and refreshed
+# weekly. `rm ~/.cache/dotnet-install.sh` to force-refresh sooner.
+
+set -euo pipefail
+
+INSTALLER="${HOME}/.cache/dotnet-install.sh"
+mkdir -p "$(dirname "$INSTALLER")"
+
+# Refresh if missing or older than 7 days
+if [ ! -f "$INSTALLER" ] || [ -n "$(find "$INSTALLER" -mtime +7 2>/dev/null)" ]; then
+  echo "Fetching dotnet-install.sh"
+  curl -fsSL https://dot.net/v1/dotnet-install.sh -o "$INSTALLER"
+  chmod +x "$INSTALLER"
+fi
+
+if [ $# -eq 0 ]; then
+  echo "No channel specified — installing latest"
+  "$INSTALLER"
+else
+  for v in "$@"; do
+    echo "Installing .NET channel $v"
+    "$INSTALLER" --channel "$v"
+  done
+fi

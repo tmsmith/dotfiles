@@ -1,0 +1,26 @@
+#!/bin/bash
+# Run `brew bundle` against the Brewfile. The .tmpl include below embeds the
+# Brewfile's content hash so chezmoi re-runs this script whenever the
+# Brewfile changes — not just when this script's text changes.
+#
+# Brewfile content hash: {{ include "Brewfile" | sha256sum }}
+
+set -euo pipefail
+
+# Ensure brew is on PATH (run_once_before_030 installs it)
+export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+
+if ! command -v brew >/dev/null; then
+  echo "brew not found on PATH — did run_once_before_030-install-brew run?"
+  exit 1
+fi
+
+BREWFILE="{{ .chezmoi.sourceDir }}/Brewfile"
+
+if [ ! -f "$BREWFILE" ]; then
+  echo "Brewfile not found at $BREWFILE"
+  exit 1
+fi
+
+echo ">>> brew bundle --file=$BREWFILE"
+brew bundle check --file="$BREWFILE" || brew bundle --file="$BREWFILE"

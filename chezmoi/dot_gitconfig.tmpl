@@ -1,10 +1,10 @@
+[user]
+  name = {{ .name }}
+  email = {{ .email }}
 
 [hub]
   protocol = https
   host = github.com
-
-[include]
-  path = ~/.gitconfig.local
 
 [color]
   diff   = auto
@@ -29,8 +29,6 @@
   untracked = cyan
 
 [core]
-  excludesfile = /opt/boxen/config/git/gitignore
-  # editor = atom --wait
   editor = nano
 	pager = diff-so-fancy | less --tabs=4 -RFX
 
@@ -47,22 +45,20 @@
   autocorrect = 1
 
 [push]
-  # See `git help config` (search for push.default)
-  # for more information on different options of the below setting.
-  #
-  # Setting to git 2.0 default to surpress warning message
   default = simple
 
 [alias]
   # Removes all branches except master
   nuke = "!f() { git branch | grep -v 'master' | grep -v '^*' | xargs git branch -D; }; f"
-  
+
   # Fetch from remote and remove all branch who's orgin has been removed
   # This only works if tracking upstream
   sync = "!f() { git checkout master; git fetch -p; git reset --hard origin/master; git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -D; }; f"
 
   la = "!git config -l | grep alias | cut -c 7-"
 
+  # NOTE: these reference $DF/bin/* scripts that don't exist in the repo;
+  # left as-is for parity with current state. Clean up separately.
   promote = !$DF/bin/git-promote
   wtf     = !$DF/bin/git-wtf
   rank-contributers = !$DF/bin/git-rank-contributers
@@ -117,11 +113,11 @@
   dlc = diff --cached HEAD^
 
   # Show content (full diff) of a commit given a revision
-  diffr  = "!f() { git diff "$1"^.."$1"; }; f"
-  dr     = "!f() { git diff "$1"^.."$1"; }; f"
+  diffr  = "!f() { git diff \"$1\"^..\"$1\"; }; f"
+  dr     = "!f() { git diff \"$1\"^..\"$1\"; }; f"
 
   # List changes of a commit given a revision
-  lc = "!f() { git ll "$1"^.."$1"; }; f"
+  lc = "!f() { git ll \"$1\"^..\"$1\"; }; f"
 
   # Find a file path in codebase
   f = "!git ls-files | grep -i"
@@ -138,9 +134,6 @@
   smudge = git-lfs smudge %f
   required = true
 
-[http]
-  cookiefile = /Users/thad/.gitcookies
-
 [pager]
   diff = diff-so-fancy | less --tabs=1,5 -R
   show = diff-so-fancy | less --tabs=1,5 -R
@@ -148,11 +141,16 @@
 [diff-so-fancy]
 	stripLeadingSymbols = false
 
+[interactive]
+    diffFilter = diff-so-fancy --patch
+
 [init]
 	defaultBranch = main
+
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
+
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
