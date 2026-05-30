@@ -66,9 +66,12 @@ defaults write com.apple.dock wvous-tr-modifier -int 0
 defaults write com.apple.dock wvous-bl-corner   -int 4   # Desktop
 defaults write com.apple.dock wvous-bl-modifier -int 0
 
-# Restart affected apps
+# Restart affected apps so they pick up the new defaults.
+# Deliberately NOT killing Terminal — chezmoi is driven from Terminal during
+# `chezmoi apply`, so killing it would kill the apply mid-run. Terminal picks
+# up the new defaults the next time you open a window.
 for app in "Activity Monitor" "cfprefsd" "Dock" "Finder" "Google Chrome" \
-           "Google Chrome Canary" "Terminal"; do
+           "Google Chrome Canary"; do
   killall "${app}" >/dev/null 2>&1 || true
 done
 
