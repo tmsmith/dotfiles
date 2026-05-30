@@ -9,7 +9,6 @@ brew "ack"
 brew "azcopy"
 brew "azure-cli"
 brew "curl"
-brew "cmux"
 brew "diff-so-fancy"
 brew "findutils"
 brew "fzf"
@@ -37,6 +36,7 @@ brew "zoxide"
 
 cask "1password", args: { appdir: "/Applications" }
 cask "another-redis-desktop-manager"
+cask "cmux"
 cask "claude"
 cask "cyberduck", args: { appdir: "/Applications" }
 cask "discord"
