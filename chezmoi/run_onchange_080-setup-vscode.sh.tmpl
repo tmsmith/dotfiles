@@ -7,6 +7,9 @@
 
 set -euo pipefail
 
+# Need code + jq on PATH; chezmoi may run scripts with a minimal environment
+export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+
 USER_DIR="$HOME/Library/Application Support/Code/User"
 SOURCE_SETTINGS="{{ .chezmoi.sourceDir }}/vscode/settings.json"
 
