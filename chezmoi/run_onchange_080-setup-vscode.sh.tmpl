@@ -30,6 +30,41 @@ vscode_profile_dir() {
   [ -n "$loc" ] && echo "$USER_DIR/profiles/$loc"
 }
 
+# VSCode CLI's `code --profile X --install-extension Y` does NOT auto-create
+# profile X if it doesn't exist — it errors with "Profile 'X' not found".
+# So we register the profile in storage.json ourselves before the install.
+ensure_profile() {
+  local name="$1"
+
+  # Default always exists in VSCode; nothing to do
+  [ "$name" = "Default" ] && return 0
+
+  local storage="$USER_DIR/globalStorage/storage.json"
+
+  # Already registered? Done.
+  if [ -f "$storage" ] && \
+     jq -e --arg n "$name" '.userDataProfiles[]? | select(.name == $n)' \
+       "$storage" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "creating VSCode profile: $name"
+
+  # Random 8-hex-char location id, prefixed with `-` like VSCode does
+  local loc
+  loc="-$(head -c 4 /dev/urandom | xxd -p)"
+
+  mkdir -p "$USER_DIR/profiles/$loc"
+  mkdir -p "$(dirname "$storage")"
+  [ -f "$storage" ] || echo '{}' > "$storage"
+
+  # Append the new profile entry; idempotent thanks to the check above
+  local tmp; tmp="$(mktemp)"
+  jq --arg n "$name" --arg l "$loc" \
+     '(.userDataProfiles //= []) | .userDataProfiles += [{location: $l, name: $n}]' \
+     "$storage" > "$tmp" && mv "$tmp" "$storage"
+}
+
 link_settings_into() {
   local prof_dir="$1"
   [ -d "$prof_dir" ] || return 0
@@ -56,6 +91,7 @@ link_settings_into() {
 setup_profile() {
   local profile="$1"; shift
   echo ">>> profile: $profile"
+  ensure_profile "$profile"
   for ext in "$@"; do
     code --profile "$profile" --install-extension "$ext" >/dev/null
   done
