@@ -3,7 +3,6 @@
 # error tap "homebrew/cask-versions"
 # not needed tap "homebrew/core"
 
-tap "microsoft/mssql-release"
 tap "warrensbox/tap"
 
 brew "ack"
@@ -23,8 +22,8 @@ brew "jq"
 brew "libssh2"
 brew "make"
 brew "mas"
-brew "microsoft/mssql-release/mssql-tools"
 brew "node"
+brew "sqlcmd"
 brew "pipx"
 brew "python@3.9"
 brew "rsync"
