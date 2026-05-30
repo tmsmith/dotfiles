@@ -31,6 +31,16 @@ if ! /usr/bin/xcode-select -p >/dev/null 2>&1; then
   until /usr/bin/xcode-select -p >/dev/null 2>&1; do sleep 5; done
 fi
 
+# Cache sudo credentials once upfront and keep the timestamp alive for the
+# rest of this script. The chezmoi run-scripts (brew install, brew bundle,
+# defaults writes that touch /Library, etc.) all inherit the cached sudo,
+# so the rest of the install runs unattended.
+step "Caching sudo credentials (one prompt, then unattended)"
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done &
+SUDO_KEEPALIVE_PID=$!
+trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
+
 # Install chezmoi and apply. chezmoi's installer drops a binary in $HOME/bin
 # by default. Run-scripts handle Homebrew, Brewfile, etc.
 step "Installing chezmoi and applying dotfiles ($REPO @ $BRANCH)"
