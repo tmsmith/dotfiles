@@ -1,0 +1,7 @@
+# vscode/ is referenced by a run-script that symlinks settings.json into
+# ~/Library/Application Support/Code/User/ — not auto-applied as a dotfile.
+vscode
+vscode/**
+
+# Brewfile is consumed by run_onchange_before_040-brew-bundle — not a dotfile.
+Brewfile

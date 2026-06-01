@@ -1,0 +1,51 @@
+#!/bin/bash
+# Run `brew bundle` against the Brewfile.
+#
+# brew bundle continues past per-item failures by default and reports a
+# summary at the end. We deliberately swallow its non-zero exit so chezmoi
+# can keep going to subsequent run-scripts — partial brew state shouldn't
+# block .NET install, VSCode profile setup, etc.
+#
+# To retry brew bundle after fixing a failed item:
+#   - If you edit the Brewfile:  `chezmoi apply` re-runs this script
+#   - If you didn't edit it:     run `brew bundle --file=<sourceDir>/Brewfile`
+#
+# Brewfile content hash: {{ include "Brewfile" | sha256sum }}
+
+set -uo pipefail   # NOTE: no -e — see comment above
+
+# Ensure brew is on PATH (run_once_before_030 installs it)
+export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+
+if ! command -v brew >/dev/null; then
+  echo "brew not found on PATH — did run_once_before_030-install-brew run?"
+  exit 1
+fi
+
+BREWFILE="{{ .chezmoi.sourceDir }}/Brewfile"
+
+if [ ! -f "$BREWFILE" ]; then
+  echo "Brewfile not found at $BREWFILE"
+  exit 1
+fi
+
+if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
+  echo "Brewfile already satisfied — nothing to install"
+  exit 0
+fi
+
+echo ">>> brew bundle --file=$BREWFILE"
+brew bundle --file="$BREWFILE"
+rc=$?
+
+if [ "$rc" -ne 0 ]; then
+  echo
+  echo "WARN: brew bundle exited $rc — some entries above failed."
+  echo "      See the per-item failures and summary above."
+  echo "      To retry after fixing:"
+  echo "        chezmoi apply                   (if you edit the Brewfile)"
+  echo "        brew bundle --file=$BREWFILE  (if not)"
+  echo "      Continuing with remaining chezmoi scripts."
+fi
+
+exit 0

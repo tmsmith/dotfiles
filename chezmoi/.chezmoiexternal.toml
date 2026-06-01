@@ -1,0 +1,13 @@
+# Replaces the .gitmodules entries for zsh plugins. chezmoi clones these
+# directly into the destination (no submodule init dance), refreshes weekly,
+# and caches across machines.
+
+[".zsh-plugins/zsh-syntax-highlighting"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    refreshPeriod = "168h"
+
+[".zsh-plugins/zsh-autosuggestions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+    refreshPeriod = "168h"

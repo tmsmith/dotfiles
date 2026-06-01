@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+# Configure VSCode profiles and link the tracked user config into each.
+# The include below embeds the settings.json content hash so this script
+# re-runs whenever settings.json changes — not just when this script does.
+#
+# vscode/settings.json hash: {{ include "vscode/settings.json" | sha256sum }}
+
+set -euo pipefail
+
+# Need code + jq on PATH; chezmoi may run scripts with a minimal environment
+export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+
+USER_DIR="$HOME/Library/Application Support/Code/User"
+SOURCE_SETTINGS="{{ .chezmoi.sourceDir }}/vscode/settings.json"
+
+mkdir -p "$USER_DIR"
+
+vscode_profile_dir() {
+  local name="$1"
+  if [ "$name" = "Default" ]; then
+    echo "$USER_DIR"
+    return
+  fi
+  local storage="$USER_DIR/globalStorage/storage.json"
+  [ -f "$storage" ] || return 0
+  local loc
+  loc=$(jq -r --arg n "$name" \
+    '.userDataProfiles[]? | select(.name == $n) | .location' \
+    "$storage" 2>/dev/null) || return 0
+  [ -n "$loc" ] && echo "$USER_DIR/profiles/$loc"
+}
+
+# VSCode CLI's `code --profile X --install-extension Y` does NOT auto-create
+# profile X if it doesn't exist — it errors with "Profile 'X' not found".
+# So we register the profile in storage.json ourselves before the install.
+ensure_profile() {
+  local name="$1"
+
+  # Default always exists in VSCode; nothing to do
+  [ "$name" = "Default" ] && return 0
+
+  local storage="$USER_DIR/globalStorage/storage.json"
+
+  # Already registered? Done.
+  if [ -f "$storage" ] && \
+     jq -e --arg n "$name" '.userDataProfiles[]? | select(.name == $n)' \
+       "$storage" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "creating VSCode profile: $name"
+
+  # Random 8-hex-char location id, prefixed with `-` like VSCode does
+  local loc
+  loc="-$(head -c 4 /dev/urandom | xxd -p)"
+
+  mkdir -p "$USER_DIR/profiles/$loc"
+  mkdir -p "$(dirname "$storage")"
+  [ -f "$storage" ] || echo '{}' > "$storage"
+
+  # Append the new profile entry; idempotent thanks to the check above
+  local tmp; tmp="$(mktemp)"
+  jq --arg n "$name" --arg l "$loc" \
+     '(.userDataProfiles //= []) | .userDataProfiles += [{location: $l, name: $n}]' \
+     "$storage" > "$tmp" && mv "$tmp" "$storage"
+}
+
+link_settings_into() {
+  local prof_dir="$1"
+  [ -d "$prof_dir" ] || return 0
+  local dst="$prof_dir/settings.json"
+
+  # Drop VSCode's empty placeholder ({}, [], or empty) so we can link
+  if [ -f "$dst" ] && [ ! -L "$dst" ]; then
+    local content
+    content=$(tr -d '[:space:]' < "$dst")
+    if [[ "$content" == "{}" || "$content" == "[]" || -z "$content" ]]; then
+      rm "$dst"
+    fi
+  fi
+
+  # If something user-edited is already there, don't clobber it
+  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    echo "skip: $dst has custom content, not linking"
+    return 0
+  fi
+
+  ln -sf "$SOURCE_SETTINGS" "$dst"
+}
+
+setup_profile() {
+  local profile="$1"; shift
+  echo ">>> profile: $profile"
+  ensure_profile "$profile"
+  for ext in "$@"; do
+    code --profile "$profile" --install-extension "$ext" >/dev/null
+  done
+  local d
+  d=$(vscode_profile_dir "$profile") || true
+  [ -n "$d" ] && link_settings_into "$d"
+}
+
+# Default — always-on. Stack profiles union this list as a base.
+default_extensions=(
+  anthropic.claude-code
+  esbenp.prettier-vscode
+  mechatroner.rainbow-csv
+  ryu1kn.partial-diff
+  bpruitt-goddard.mermaid-markdown-syntax-highlighting
+  hediet.vscode-drawio
+)
+
+# .NET + Vue + MSSQL + Azure stack
+vue_net_mssql_extensions=(
+  ms-dotnettools.csdevkit
+  ms-dotnettools.csharp
+  ms-dotnettools.vscode-dotnet-runtime
+  dbaeumer.vscode-eslint
+  vue.volar
+  ms-mssql.data-workspace-vscode
+  ms-mssql.mssql
+  ms-mssql.sql-bindings-vscode
+  sqlfluff.vscode-sqlfluff
+  ms-azuretools.vscode-azurefunctions
+  ms-azuretools.vscode-azureresourcegroups
+)
+
+setup_profile "Default" "${default_extensions[@]}"
+setup_profile "Vue/NET/MSSQL" \
+  "${default_extensions[@]}" \
+  "${vue_net_mssql_extensions[@]}"
+
+# Optional extras (uncomment as needed):
+#   ms-mssql.sql-database-projects-vscode    SQL Database Projects
+#   ms-dotnettools.vscodeintellicode-csharp  IntelliCode for C#
+#   cweijan.vscode-database-client2          DB client UI
+#   cweijan.dbclient-jdbc                    JDBC backend
+#   dineug.vuerd-vscode                      ER diagram authoring
+#   kaishuu0123.vscode-erd-preview           ER diagram preview
+#   azurite.azurite                          Local Azure Storage emulator
+
+echo "VSCode configured"

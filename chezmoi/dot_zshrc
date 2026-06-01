@@ -1,0 +1,16 @@
+autoload -Uz compinit
+compinit
+
+if [ "$(command -v starship)" ]; then
+	eval "$(starship init zsh)"
+fi
+
+[ -L ~/.localrc ] && source ~/.localrc
+
+for file ($HOME/.zsh/*.zsh); do
+  source $file
+done
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[ -f ~/.docker/init-zsh.sh ] && source ~/.docker/init-zsh.sh

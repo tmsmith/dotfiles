@@ -1,0 +1,82 @@
+# deprecated tap "homebrew/bundl"
+# deprecated tap "homebrew/cask"
+# error tap "homebrew/cask-versions"
+# not needed tap "homebrew/core"
+
+tap "warrensbox/tap"
+
+brew "ack"
+brew "azcopy"
+brew "azure-cli"
+brew "curl"
+brew "diff-so-fancy"
+brew "findutils"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "gnu-sed"
+brew "gnu-tar"
+brew "go"
+brew "htop"
+brew "jq"
+brew "libssh2"
+brew "make"
+brew "mas"
+brew "node"
+brew "podman"
+brew "podman-compose"
+brew "sqlcmd"
+brew "pipx"
+brew "python@3.9"
+brew "rsync"
+brew "starship"
+brew "tldr"
+brew "watch"
+brew "zoxide"
+
+cask "1password", args: { appdir: "/Applications" }
+cask "another-redis-desktop-manager"
+cask "cmux"
+cask "claude"
+cask "cyberduck", args: { appdir: "/Applications" }
+cask "discord"
+cask "google-chrome"
+cask "hammerspoon", args: { appdir: "/Applications" }
+cask "iterm2", args: { appdir: "/Applications" }
+cask "logi-options+"
+cask "microsoft-azure-storage-explorer"
+cask "microsoft-office"
+cask "microsoft-teams"
+cask "postman"
+cask "rectangle"
+cask "royal-tsx", args: { appdir: "/Applications" }
+cask "spotify"
+cask "sublime-text", args: { appdir: "/Applications" }
+cask "utm"
+cask "visual-studio-code", args: { appdir: "/Applications" }
+cask "zoom"
+
+mas "Tailscale", id: 1475387142
+
+# VSCode extensions are managed by .setup/macos/06-vscode.zsh
+
+# cask "vmware-fusion", args: { appdir: "/Applications" }
+
+# cask "slack", args: { appdir: "/Applications" }
+# cask "firefox-developer-edition", args: { appdir: "/Applications" }
+# cask "google-drive"
+# cask "gpg-suite", args: { appdir: "/Applications" }
+# cask "java", args: { appdir: "/Applications" }
+# cask "jetbrains-toolbox", args: { appdir: "/Applications" }
+# cask "keybase"
+# cask "tenor"
+# cask "tunnelblick", args: { appdir: "/Applications" }
+# brew "awscli", args: ["HEAD"]
+# brew "protobuf", args: ["HEAD"]
+# brew "eksctl"
+# brew "helm"
+# brew "kind"
+# brew "kubernetes-cli"
+
+# brew "warrensbox/tap/tfswitch"
+# brew "terragrunt"
