@@ -7,21 +7,21 @@
 #
 # What this installs (the bare minimum chezmoi can't bootstrap itself):
 #   1. Xcode CLT — provides git, which chezmoi init needs to clone the repo
-#   2. chezmoi   — into ~/.local/bin via its standalone installer
+#   2. chezmoi   — into ~/bin via its standalone installer
 #
 # Everything else (Homebrew, Brewfile, .NET, VSCode profiles, macOS defaults)
 # is handled by chezmoi/run_* scripts during init --apply.
 #
-# Chezmoi binary lives at ~/.local/bin; chezmoi-managed binaries (e.g.
-# bin/install-dotnet) live at ~/bin. Keeping them in separate directories
-# avoids a chezmoi quirk where managed files in the same dir as the chezmoi
-# binary sometimes fail to apply.
+# Chezmoi binary lives at ~/bin; chezmoi-managed binaries (install-dotnet,
+# etc.) live at ~/.local/bin. Keeping them in separate directories avoids
+# a quirk where chezmoi won't apply files into a directory that already
+# contains its own self-installed binary.
 
 set -e
 
 REPO="${DOTFILES_REPO:-tmsmith/dotfiles}"
 BRANCH="${DOTFILES_BRANCH:-chezmoi/migration}"
-CHEZMOI_BIN_DIR="${CHEZMOI_BIN_DIR:-$HOME/.local/bin}"
+CHEZMOI_BIN_DIR="${CHEZMOI_BIN_DIR:-$HOME/bin}"
 
 step() { printf '\n==> %s\n' "$*"; }
 

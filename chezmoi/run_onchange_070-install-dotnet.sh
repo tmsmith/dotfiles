@@ -11,5 +11,5 @@ echo ">>> Installing .NET"
 # ${versions[@]+...} guards against the bash 3.2 + set -u quirk where an
 # empty array reference is treated as unbound. Expands to nothing when the
 # array is empty, to the elements when not.
-"$HOME/bin/install-dotnet" ${versions[@]+"${versions[@]}"}
+"$HOME/.local/bin/install-dotnet" ${versions[@]+"${versions[@]}"}
 echo ".NET installed to \$HOME/.dotnet"
