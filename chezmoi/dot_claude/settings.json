@@ -28,5 +28,6 @@
         "url": "https://github.com/mixedbread-ai/mgrep.git"
       }
     }
-  }
+  },
+  "theme": "dark"
 }

@@ -1,4 +1,4 @@
-require "screen"
+--require "screen"
 --require "stuff"
 --local clippy = require "clippy"
 
@@ -21,17 +21,39 @@ function automaticReloadConfig(files)
     end
 end
 
-
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", automaticReloadConfig):start()
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", reloadConfig)
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "L", function() hs.caffeinate.startScreensaver() end)
-
 --clippy:init()
 
+function launchOrFocus(app)
+  return function()
+    hs.application.launchOrFocus(app)
+  end
+end
 
--- TODO: layouts
+function runCommand(command)
+  return function()
+    hs.task.new(command, nil):start()
+  end
+end
 
---hs.alert.show("Config loaded")
+local bindings = {
+  [{'alt', 'cmd', 'ctrl', 'shift'}] = {
+    c = launchOrFocus('Google Chrome'),
+    f = launchOrFocus('Finder'),
+    v = launchOrFocus('Visual Studio Code'),
+    p = launchOrFocus('1Password'),
+    t = launchOrFocus('cmux'),
+    y = launchOrFocus('System Preferences'),
+    o = launchOrFocus('Microsoft Outlook'),
+  },
+}
+
+for modifier, keyActions in pairs(bindings) do
+  for key, action in pairs(keyActions) do
+    hs.hotkey.bind(modifier, tostring(key), action)
+  end
+end
 
 hs.notify.new({
     title='Hammerspoon',
