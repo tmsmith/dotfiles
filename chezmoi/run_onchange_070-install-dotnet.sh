@@ -8,8 +8,9 @@ set -euo pipefail
 versions=()
 
 echo ">>> Installing .NET"
+"$HOME/.local/bin/get-install-dotnet.sh"
 # ${versions[@]+...} guards against the bash 3.2 + set -u quirk where an
 # empty array reference is treated as unbound. Expands to nothing when the
 # array is empty, to the elements when not.
-"$HOME/.local/bin/install-dotnet" ${versions[@]+"${versions[@]}"}
+"$HOME/bin/dotnet-install.sh" ${versions[@]+"${versions[@]}"}
 echo ".NET installed to \$HOME/.dotnet"

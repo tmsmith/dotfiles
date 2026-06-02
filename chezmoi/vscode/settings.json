@@ -13,5 +13,6 @@
     "claudeCode.preferredLocation": "panel",
     "chat.viewSessions.orientation": "stacked",
     "chat.disableAIFeatures": true,
-    "git.openRepositoryInParentFolders": "always"
+    "git.openRepositoryInParentFolders": "always",
+    "hediet.vscode-drawio.resizeImages": null
 }
