@@ -1,9 +1,5 @@
-require "screen"
---require "stuff"
 --local clippy = require "clippy"
-
-hs.window.animationDuration = 0
-hs.application.enableSpotlightForNameSearches(true)
+require "notify"
 
 function reloadConfig()
 	hs.reload()
@@ -21,17 +17,9 @@ function automaticReloadConfig(files)
     end
 end
 
-
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", automaticReloadConfig):start()
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", reloadConfig)
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "L", function() hs.caffeinate.startScreensaver() end)
-
 --clippy:init()
-
-
--- TODO: layouts
-
---hs.alert.show("Config loaded")
 
 hs.notify.new({
     title='Hammerspoon',

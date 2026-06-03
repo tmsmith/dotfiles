@@ -36,3 +36,5 @@ alias 9='cd -9'
 alias ll='ls -laFsh'
 
 alias mktmp='cd $(mktemp -d)'
+
+alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'

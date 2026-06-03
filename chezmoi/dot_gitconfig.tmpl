@@ -102,6 +102,9 @@
   # Default look for short git log
   le = log --oneline --decorate
 
+  # Colorized graph log — `git lg`
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
   # Show the history of a file, with diffs
   filelog = log -u
   fl      = log -u

@@ -65,27 +65,37 @@ ensure_profile() {
      "$storage" > "$tmp" && mv "$tmp" "$storage"
 }
 
-link_settings_into() {
+bootstrap_settings_into() {
+  # Seed the live VSCode settings.json with a copy of our tracked source,
+  # but only when there's no real content there yet — empty/placeholder,
+  # missing, or an old-design symlink. Once the live file has meaningful
+  # content, leave it alone. This is intentional: VSCode writes runtime
+  # state into settings.json (recent windows, telemetry, mssql connections
+  # the extension persists, etc.), and that state should NOT flow back
+  # into the tracked source. To pull intentional edits back into source,
+  # use ~/.local/bin/sync-vscode-settings.sh (filters out unsafe keys).
   local prof_dir="$1"
   [ -d "$prof_dir" ] || return 0
   local dst="$prof_dir/settings.json"
 
-  # Drop VSCode's empty placeholder ({}, [], or empty) so we can link
-  if [ -f "$dst" ] && [ ! -L "$dst" ]; then
+  # Migrate from old design: if the destination is a symlink (from when we
+  # used `ln -sf`), remove it so we can replace with a real file copy.
+  if [ -L "$dst" ]; then
+    rm "$dst"
+  fi
+
+  # If real content is already there, leave alone
+  if [ -f "$dst" ]; then
     local content
     content=$(tr -d '[:space:]' < "$dst")
-    if [[ "$content" == "{}" || "$content" == "[]" || -z "$content" ]]; then
-      rm "$dst"
+    if [[ "$content" != "{}" && "$content" != "[]" && -n "$content" ]]; then
+      echo "  $dst already has content, skipping seed"
+      return 0
     fi
   fi
 
-  # If something user-edited is already there, don't clobber it
-  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
-    echo "skip: $dst has custom content, not linking"
-    return 0
-  fi
-
-  ln -sf "$SOURCE_SETTINGS" "$dst"
+  cp "$SOURCE_SETTINGS" "$dst"
+  echo "  seeded $dst from source"
 }
 
 setup_profile() {
@@ -97,7 +107,7 @@ setup_profile() {
   done
   local d
   d=$(vscode_profile_dir "$profile") || true
-  [ -n "$d" ] && link_settings_into "$d"
+  [ -n "$d" ] && bootstrap_settings_into "$d"
 }
 
 # Default — always-on. Stack profiles union this list as a base.
@@ -123,6 +133,7 @@ vue_net_mssql_extensions=(
   sqlfluff.vscode-sqlfluff
   ms-azuretools.vscode-azurefunctions
   ms-azuretools.vscode-azureresourcegroups
+  ms-mssql.sql-database-projects-vscode
 )
 
 setup_profile "Default" "${default_extensions[@]}"

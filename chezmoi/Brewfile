@@ -48,7 +48,8 @@ cask "microsoft-azure-storage-explorer"
 cask "microsoft-office"
 cask "microsoft-teams"
 cask "postman"
-cask "rectangle"
+# cask "rectangle"
+cask "raycast"
 cask "royal-tsx", args: { appdir: "/Applications" }
 cask "spotify"
 cask "sublime-text", args: { appdir: "/Applications" }

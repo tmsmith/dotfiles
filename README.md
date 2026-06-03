@@ -1,179 +1,94 @@
 # .files
 
-Personal macOS dotfiles. Symlinks config files into `$HOME`, sets up zsh, and installs apps via Homebrew.
+Personal macOS dotfiles managed by [chezmoi](https://chezmoi.io).
 
-## Setup
+## Fresh-machine setup
 
-On a fresh Mac, git is not yet available. Use `curl` (pre-installed on macOS) to bootstrap — the installer will handle Xcode and everything else.
-
-### 1. Download and install
+On a new mac, one command:
 
 ```sh
-curl -fsSL https://github.com/tmsmith/dotfiles/archive/refs/heads/master.tar.gz | tar -xz
-mv dotfiles-master ~/.files
-cd ~/.files
-zsh .setup/installMac
+curl -fsSL https://raw.githubusercontent.com/tmsmith/dotfiles/master/bootstrap.sh | sh
 ```
 
-This will install Xcode Command Line Tools (including git), Homebrew, and all packages before symlinking your dotfiles.
+`bootstrap.sh` installs Xcode Command Line Tools (for git), chezmoi (standalone, into `~/bin`), then runs `chezmoi init --apply tmsmith/dotfiles`. Everything else — Homebrew install, brew bundle, .NET install, VSCode profile setup, macOS defaults — runs from chezmoi's `run_*` scripts inside the source tree.
 
-### 2. Initialize git and pull submodules
+The full apply takes ~25–35 minutes unattended after one sudo prompt at the start.
 
-Once the installer finishes, git is available via Homebrew. Convert the directory into a proper repo and pull in the zsh plugin submodules:
-
-```sh
-cd ~/.files
-git init
-git remote add origin https://github.com/tmsmith/dotfiles.git
-git fetch
-git checkout master
-git submodule update --init
-```
-
-### 3. Set your git identity
-
-Git identity lives in `private/gitconfig.local`, which is not committed. Create it, then re-run the linker to symlink it (and anything else in `private/`):
-
-```sh
-cat > ~/.files/private/gitconfig.local << 'EOF'
-[user]
-  name = Your Name
-  email = you@example.com
-EOF
-
-cd ~/.files/.setup && source core.zsh && DF=~/.files df::install
-```
-
-### 4. Reload your shell
-
-```sh
-exec zsh
-```
-
----
-
-### Already have git? (re-install / update)
-
-```sh
-git clone --recurse-submodules https://github.com/tmsmith/dotfiles ~/.files
-cd ~/.files
-zsh .setup/installMac
-```
-
----
-
-## What the installer does
-
-1. **Xcode CLI tools** — installs if not already present
-2. **Shell** — ensures zsh is the default shell
-3. **macOS defaults** — applies system preferences (Dock, Finder, screenshots, etc.)
-4. **Homebrew** — installs Homebrew, then runs `brew bundle` from the Brewfile
-5. **Dotfiles** — symlinks everything in `home/` and `private/` into `$HOME`
-6. **Fonts** — rsyncs `home/fonts/` into `~/Library/Fonts/`
-
-> The installer keeps `sudo` alive for the duration so you won't be re-prompted.
-
----
-
-## What gets installed
-
-### CLI tools (Homebrew)
-
-| Package | Purpose |
-|---|---|
-| `ack` | Code search |
-| `awscli` | AWS CLI |
-| `curl` | HTTP client |
-| `findutils` | GNU find/xargs |
-| `fzf` | Fuzzy finder |
-| `gh` | GitHub CLI |
-| `git` | Version control |
-| `gnu-sed` / `gnu-tar` | GNU coreutils |
-| `go` | Go language |
-| `jq` | JSON processor |
-| `make` | Build tool |
-| `mas` | Mac App Store CLI |
-| `node` | Node.js |
-| `python@3.9` | Python |
-| `rsync` | File sync |
-| `starship` | Shell prompt |
-| `tldr` | Simplified man pages |
-| `watch` | Run commands repeatedly |
-| `zoxide` | Smarter `cd` |
-
-### Apps (Homebrew Cask)
-
-| App | Purpose |
-|---|---|
-| 1Password | Password manager |
-| Discord | Chat |
-| Docker | Containers |
-| .NET SDK | .NET development |
-| Hammerspoon | macOS automation |
-| Insomnia | REST/API client |
-| iTerm2 | Terminal |
-| Royal TSX | Remote connections |
-| Spotify | Music |
-| Sublime Text | Text editor |
-| Visual Studio Code | Code editor |
-
-### Zsh plugins (submodules)
-
-| Plugin | Purpose |
-|---|---|
-| `zsh-syntax-highlighting` | Shell syntax highlighting |
-| `zsh-autosuggestions` | Fish-style command suggestions |
-
----
-
-## What gets symlinked
-
-Everything in `home/` is symlinked to `~/.{filename}`:
-
-| File | Destination |
-|---|---|
-| `home/zshrc` | `~/.zshrc` |
-| `home/zshenv` | `~/.zshenv` |
-| `home/gitconfig` | `~/.gitconfig` |
-| `home/curlrc` | `~/.curlrc` |
-| `home/wgetrc` | `~/.wgetrc` |
-| `home/starship` | `~/.starship` |
-| `home/hammerspoon/` | `~/.hammerspoon/` |
-| `home/iterm2/` | `~/.iterm2/` |
-| `home/fonts/` | synced to `~/Library/Fonts/` |
-
-Private files (not committed) go in `private/` and are symlinked the same way.
-
----
-
-## macOS defaults applied
-
-- Finder shows hidden files, status bar, external drives
-- Screenshots saved to `~/Desktop/Screenshots` as PNG (no shadow)
-- Dock auto-hides, no animation delay, icons at 42px, minimizes to app icon
-- Save/print panels expanded by default
-- Saves go to disk, not iCloud
-- Bluetooth audio quality increased
-- Password required immediately on sleep/screensaver
-- Hot corners: top-left → Mission Control, top-right → Screensaver, bottom-left → Desktop
-
----
-
-## Structure
+## Layout
 
 ```
 .files/
-├── .setup/
-│   ├── installMac          # Main entry point
-│   ├── _install            # Core install logic (linking, fonts)
-│   ├── core.zsh            # Utilities (logging, df::link)
-│   └── macos/
-│       ├── 00-xcode.zsh    # Xcode CLI tools
-│       ├── 01-shell.zsh    # Shell setup
-│       ├── 02-settings.zsh # macOS defaults
-│       ├── 03-homebrew.zsh # Homebrew + Brewfile
-│       └── Brewfile        # Package list
-├── home/                   # Config files → symlinked to ~/
-├── private/                # Private configs → symlinked to ~/ (not committed)
-└── zsh/                    # Zsh plugin scripts and submodules
+├── bootstrap.sh                # fresh-machine entry point
+├── .chezmoiroot                # tells chezmoi the source lives in chezmoi/
+└── chezmoi/
+    ├── .chezmoi.toml.tmpl      # prompts for name + email on init
+    ├── .chezmoiexternal.toml   # zsh plugin externals (replaces submodules)
+    ├── .chezmoiignore          # excludes Brewfile + vscode/ from auto-apply
+    ├── Brewfile                # consumed by the brew-bundle run-script
+    ├── dot_zshrc, dot_zshenv   # → ~/.zshrc, ~/.zshenv
+    ├── dot_gitconfig.tmpl      # templated git identity
+    ├── dot_curlrc, dot_gemrc, dot_irbrc, dot_starship, dot_wgetrc
+    ├── dot_hammerspoon/        # → ~/.hammerspoon/
+    ├── dot_claude/             # → ~/.claude/ (tracked subset only)
+    ├── dot_iterm2/             # → ~/.iterm2/
+    ├── dot_zsh/                # → ~/.zsh/ (sourced by zshrc)
+    ├── dot_local/bin/          # → ~/.local/bin/ (install-dotnet, etc.)
+    ├── vscode/                 # source for VSCode profile run-script
+    │                           # (symlinked into ~/Library/Application Support/Code/User/)
+    ├── run_once_before_020-set-default-shell.sh
+    ├── run_once_before_030-install-brew.sh
+    ├── run_onchange_before_040-brew-bundle.sh.tmpl
+    ├── run_onchange_050-macos-defaults.sh
+    ├── run_onchange_060-macos-dock.sh
+    ├── run_onchange_070-install-dotnet.sh
+    └── run_onchange_080-setup-vscode.sh.tmpl
 ```
+
+## Day-to-day
+
+| Goal | Command |
+|---|---|
+| Pull latest dotfiles and apply | `chezmoi update` |
+| Edit a managed file in-place | `chezmoi edit ~/.zshrc` |
+| See what would change | `chezmoi diff` |
+| Apply changes you made in source | `chezmoi apply` |
+| Add a new file to be managed | `chezmoi add ~/.somerc` |
+| Find a managed file's source | `chezmoi source-path ~/.zshrc` |
+
+## What gets installed
+
+**CLI tools** (from `chezmoi/Brewfile`): ack, azcopy, azure-cli, curl, diff-so-fancy, findutils, fzf, gh, git, gnu-sed, gnu-tar, go, htop, jq, libssh2, make, mas, node, podman, podman-compose, sqlcmd, pipx, python@3.9, rsync, starship, tldr, watch, zoxide.
+
+**Apps** (Homebrew casks): 1Password, Another Redis Desktop, Claude, cmux, Cyberduck, Discord, Google Chrome, Hammerspoon, iTerm2, Logi Options+, Microsoft Azure Storage Explorer, Microsoft Office, Microsoft Teams, Postman, Rectangle, Royal TSX, Spotify, Sublime Text, UTM, Visual Studio Code, Zoom.
+
+**Mac App Store**: Tailscale.
+
+**VSCode profiles** (set up by `run_onchange_080-setup-vscode.sh.tmpl`):
+- **Default** (always-on) — Claude Code, Prettier, Rainbow CSV, Partial Diff, Mermaid Markdown, Drawio.
+- **Vue/NET/MSSQL** stack — Default + .NET (C# Dev Kit, IntelliCode-ish), Frontend (ESLint, Vue/Volar), Data/SQL (4 MSSQL/sqlfluff extensions), Azure (Functions, Resource Groups).
+
+**.NET SDK** via Microsoft's official `dotnet-install.sh` (installed to `~/.dotnet`).
+
+**Zsh plugins** (cloned per machine via `chezmoi/.chezmoiexternal.toml`, no submodules): `zsh-syntax-highlighting`, `zsh-autosuggestions`.
+
+**macOS defaults**: Finder shows hidden files / status bar / external drives; screenshots saved as PNG to `~/Desktop/Screenshots` with no shadow; Dock auto-hides with 42px icons, no animation delay, minimizes to app icon; password required immediately on sleep; hot corners (top-left → Mission Control, top-right → Screensaver, bottom-left → Desktop); desktop widgets disabled (Sonoma+).
+
+## Adding things
+
+| To add | Where |
+|---|---|
+| A new Homebrew formula or cask | `chezmoi/Brewfile` |
+| A new VSCode extension to Default | `default_extensions` array in `chezmoi/run_onchange_080-setup-vscode.sh.tmpl` |
+| A new VSCode extension to Vue/NET/MSSQL | `vue_net_mssql_extensions` array in same file |
+| A new VSCode profile | New `vscode::setup_profile "Name" ext1 ext2 …` call in same file |
+| A new .NET channel | `versions=()` array in `chezmoi/run_onchange_070-install-dotnet.sh` |
+| A new zsh plugin | `chezmoi/.chezmoiexternal.toml` + source line in `chezmoi/dot_zsh/plugins.zsh` |
+| A new dotfile | `chezmoi add <path>` (chezmoi copies it into the source dir with the right naming) |
+
+The `run_onchange_*` scripts re-execute automatically when their content changes — adding to the Brewfile or extension arrays triggers a re-apply on next `chezmoi update`.
+
+## Secrets
+
+Identity (git name + email) is templated via `chezmoi/.chezmoi.toml.tmpl`, which prompts on `chezmoi init`. Values stored in `~/.config/chezmoi/chezmoi.toml` (per machine, not in this repo).
+
+For future templated secrets (e.g. MSSQL connection profiles): plan is to use 1Password CLI via `{{ onepasswordRead "op://..." }}`. Add `brew install 1password-cli` + `op signin` to the bootstrap chain.
