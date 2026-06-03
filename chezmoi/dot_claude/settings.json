@@ -1,33 +1,50 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(jq:*)",
-      "Bash(git fetch:*)",
-      "Bash(git log:*)",
-      "Bash(git diff:*)",
-      "Bash(git status:*)",
-      "Bash(git show:*)",
-      "Bash(cat:*)",
-      "Bash(grep:*)",
-      "Bash(find:*)",
-      "Bash(ls:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
-      "Bash(wc:*)",
-      "Bash(echo:*)",
-      "Bash(pwd:*)",
-      "Read(**)",
-      "Read(//mnt/c/temp/**)",
-      "WebSearch"
-    ]
-  },
-  "extraKnownMarketplaces": {
-    "Mixedbread-Grep": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/mixedbread-ai/mgrep.git"
-      }
-    }
-  },
-  "theme": "dark"
+    "permissions": {
+        "allow": [
+            "Read(**)",
+            "Read(//mnt/c/temp/**)",
+            "Bash(cd *)",
+            "Bash(ls:*)",
+            "Bash(find:*)",
+            "Bash(grep:*)",
+            "Bash(cat:*)",
+            "Bash(head:*)",
+            "Bash(tail:*)",
+            "Bash(wc:*)",
+            "Bash(echo:*)",
+            "Bash(pwd:*)",
+            "Bash(git fetch:*)",
+            "Bash(git log:*)",
+            "Bash(git reflog:*)",
+            "Bash(git diff:*)",
+            "Bash(git status:*)",
+            "Bash(git show:*)",
+            "Bash(git show-ref:*)",
+            "Bash(git branch:*)",
+            "Bash(git tag:*)",
+            "Bash(git stash list:*)",
+            "Bash(git remote:*)",
+            "Bash(git blame:*)",
+            "Bash(git shortlog:*)",
+            "Bash(git describe:*)",
+            "Bash(git rev-parse:*)",
+            "Bash(git ls-files:*)",
+            "Bash(git ls-tree:*)",
+            "Bash(glob:*)",
+            "Bash(fd:*)",
+            "Bash(rg:*)",
+            "Bash(fzf:*)",
+            "Bash(jq:*)",
+            "WebSearch"
+        ]
+    },
+    "extraKnownMarketplaces": {
+        "Mixedbread-Grep": {
+            "source": {
+                "source": "git",
+                "url": "https://github.com/mixedbread-ai/mgrep.git"
+            }
+        }
+    },
+    "theme": "dark"
 }
