@@ -49,6 +49,15 @@ fi
 USER_DIR="$HOME/Library/Application Support/Code/User"
 STORAGE="$USER_DIR/globalStorage/storage.json"
 
+# Keys removed from both sides before the settings diff. These are keys we
+# deliberately don't track (sync-vscode-settings.sh strips them from source
+# too), so showing them as drift is just noise. Keep this list in sync with
+# sync-vscode-settings.sh.
+IGNORE_KEYS_JQ='
+    del(.["mssql.connections"])
+  | del(.["mssql.connectionGroups"])
+'
+
 # --- Helpers ----------------------------------------------------------------
 
 # Extract a bash array literal from the setup script.
@@ -122,12 +131,13 @@ report_settings_diff() {
     return
   fi
 
-  # Normalize via jq (sort keys, canonical indentation) so indentation /
-  # key-order differences don't pollute the content diff.
+  # Normalize via jq (sort keys, canonical indentation) and strip the keys
+  # we don't track on either side so indentation / key-order / known-extension-
+  # writeback differences don't pollute the content diff.
   local norm_src norm_dst
-  norm_src=$(jq -S . "$SOURCE_SETTINGS" 2>/dev/null) \
+  norm_src=$(jq -S "$IGNORE_KEYS_JQ" "$SOURCE_SETTINGS" 2>/dev/null) \
     || { echo "  (source settings.json is not valid JSON)"; return; }
-  norm_dst=$(jq -S . "$settings_path" 2>/dev/null) \
+  norm_dst=$(jq -S "$IGNORE_KEYS_JQ" "$settings_path" 2>/dev/null) \
     || { echo "  (profile settings.json is not valid JSON)"; return; }
 
   if [ "$norm_src" = "$norm_dst" ]; then
